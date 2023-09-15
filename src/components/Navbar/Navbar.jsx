@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 
 const Navbar = () => {
     return (
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluid">
+        <nav className="navbar bg-body-tertiary">
+            <div className="container-fluid">
                 <Link className="navbar-brand text-primary" to='/'>
                     <FontAwesomeIcon icon={faHome} /> Home
                 </Link>
