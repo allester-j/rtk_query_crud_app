@@ -3,6 +3,7 @@ import { DataGrid, GridToolbar, GridRowsProp, GridColDef } from '@mui/x-data-gri
 import { useGetUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } from "../api/apiSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons"
+import Swal from "sweetalert2"
 
 const Users = () => {
 
@@ -21,6 +22,8 @@ const Users = () => {
         companyName: ''
     })
 
+    const { name, username, email, street, suite, city, zipcode, lat, lng, phone, website, companyName } = newUser
+
     const {
         data: users,
         isLoading,
@@ -28,22 +31,261 @@ const Users = () => {
         isError,
         error
     } = useGetUsersQuery()
+    
     const [addUser] = useAddUserMutation()
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
+
+    console.log('Users')
+    console.log(users)
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
         // Add User
         addUser({
-            
+            name: name,
+            username: username,
+            email: email,
+            address: {
+                street: street,
+                suite: suite,
+                city: city,
+                zipcode: zipcode,
+                geo: {
+                    lat: lat,
+                    lng: lng
+                }
+            },
+            phone: phone,
+            website: website,
+            company: {
+                name: companyName
+            }
         })
+
+        // Reset state
+        setNewUser({
+            name: '',
+            username: '',
+            email: '',
+            street: '',
+            suite: '',
+            city: '',
+            zipcode: '',
+            lat: '-37.3159',
+            lng: '84.8753',
+            phone: '',
+            website: '',
+            companyName: ''
+        })
+    }
+
+    const handleDeleteUserBtnClick = (e, row) => {
+        e.stopPropagation()
+        console.log(row)
+
+        console.log(`System ID: ${row.systemId}`)
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to reverse this",
+            icon: 'warning',
+            showCancelButon: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#333',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteUser({ id: row.systemId })      
+            }
+        })
+    }
+
+    const columns = [
+        {
+            field: 'id',
+            headerName: 'ID',
+            flex: 1
+        },
+        {
+            field: 'name',
+            headerName: 'Name',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'username',
+            headerName: 'Username',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'email',
+            headername: 'Email',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'street',
+            headerName: 'Street',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'suite',
+            headerName: 'Suite',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'city',
+            headerName: 'City',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'zipcode',
+            headerName: 'Zipcode',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'phone',
+            headerName: 'Phone',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'website',
+            headerName: 'Website',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'company',
+            headerName: 'Company',
+            editable: true,
+            flex: 1
+        },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 1,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <button className="btn btn-danger" onClick={(e) => handleDeleteUserBtnClick(e, params.row)}>
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    </>
+                )
+            }
+        }
+    ]
+
+    let counter = 1
+    let usersArray = []
+
+    users?.forEach(user => {
+        
+        let record = {
+            id: counter++,
+            name: user?.name,
+            username: user?.username,
+            email: user?.email,
+            street: user?.address?.street,
+            suite: user?.address?.suite,
+            city: user?.address?.city,
+            zipcode: user?.address?.zipcode,
+            phone: user?.phone,
+            website: user?.website,
+            company: user?.company?.name,
+            systemId: user?.id
+        }
+
+        usersArray.push(record)
+        
+    });
+
+    let content
+    // Define conditional content
+    if (isLoading) {
+        content = <p>Loading...</p>
+    } else if (isSuccess) {
+        content = 
+            <DataGrid 
+                editMode="row" 
+                rows={usersArray} 
+                columns={columns} 
+                slots={{ toolbar: GridToolbar }} 
+                processRowUpdate={
+                    async (updatedRow, originalRow) => {
+                        console.log('Updated Row')
+                        console.log(updatedRow)
+
+                        console.log('Original Row')
+                        console.log(originalRow)
+
+                        try {
+
+                            const updatedUser = updateUser({
+                                id: updatedRow.systemId,
+                                name: updatedRow.name,
+                                username: updatedRow.username,
+                                email: updatedRow.email,
+                                address: {
+                                    street: updatedRow.street,
+                                    suite: updatedRow.suite,
+                                    city: updatedRow.city,
+                                    zipcode: updatedRow.zipcode,
+                                    geo: {
+                                        lat: '-37.3159',
+                                        lng: '84.8753',
+                                    }
+                                },
+                                phone: updatedRow.phone,
+                                website: updatedRow.website,
+                                company: {
+                                    name: updatedRow.company
+                                }
+                            })
+    
+                            console.log(updatedUser)
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'The user has been updated',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            
+                        } catch (error) {
+
+                            console.error(error)
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: `${error.message}`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            
+                        }
+
+                    }
+                }
+            />
+    } else if (isError) {
+        content = <p>{error}</p>
     }
 
     return (
         <>
-            <h1>Users</h1>
+            <div className="container-fluid mb-5">
+                <h1 className="text-primary mb-3 mt-3">Users</h1>
+                {content}
+            </div>
         </>
     )
 }
