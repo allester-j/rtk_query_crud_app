@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useGetTodosQuery, useAddTodoMutation, useUpdateTodoMutation, useDeleteTodoMutation } from '../api/apiSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
+import Navbar from '../../components/Navbar/Navbar'
 
 const TodoList = () => {
 
@@ -18,9 +19,6 @@ const TodoList = () => {
     const [addTodo] = useAddTodoMutation()
     const [updateTodo] = useUpdateTodoMutation()
     const [deleteTodo] = useDeleteTodoMutation()
-
-    console.log('Todos')
-    console.log(todos)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -56,6 +54,7 @@ const TodoList = () => {
         </form>
 
     let content;
+
     // Define conditional content
     if (isLoading) {
         content = <p>Loading...</p>
@@ -99,6 +98,7 @@ const TodoList = () => {
 
     return (
         <>
+            <Navbar />
             <main className='mb-4'>
                 <div className="row">
                     <div className="col-md-4 offset-md-4">

@@ -7,6 +7,9 @@ const Home = () => {
     return (
         <>
             <div className="container">
+                <div className="mt-5 mb-5 text-center">
+                    <h1>Redux Toolkit - RTK Query - CRUD App</h1>
+                </div>
                 <div className="row mt-5 pt-5">
                     <div className="col-md-3 offset-md-3">
                         <Link to='/todos' className="text-decoration-none">

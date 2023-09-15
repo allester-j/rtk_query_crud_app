@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons"
 import Swal from "sweetalert2"
 import AddUserModal from "../../components/AddUserModal/AddUserModal"
+import Navbar from "../../components/Navbar/Navbar"
 
 const Users = () => {
 
@@ -19,14 +20,8 @@ const Users = () => {
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
 
-    console.log('Users')
-    console.log(users)
-
     const handleDeleteUserBtnClick = (e, row) => {
         e.stopPropagation()
-        console.log(row)
-
-        console.log(`System ID: ${row.systemId}`)
 
         Swal.fire({
             title: 'Are you sure?',
@@ -162,11 +157,6 @@ const Users = () => {
                 slots={{ toolbar: GridToolbar }} 
                 processRowUpdate={
                     async (updatedRow, originalRow) => {
-                        console.log('Updated Row')
-                        console.log(updatedRow)
-
-                        console.log('Original Row')
-                        console.log(originalRow)
 
                         try {
 
@@ -191,8 +181,6 @@ const Users = () => {
                                     name: updatedRow.company
                                 }
                             })
-    
-                            console.log(updatedUser)
 
                             Swal.fire({
                                 icon: 'success',
@@ -202,8 +190,6 @@ const Users = () => {
                             })
                             
                         } catch (error) {
-
-                            console.error(error)
 
                             Swal.fire({
                                 icon: 'error',
@@ -223,6 +209,7 @@ const Users = () => {
 
     return (
         <>
+            <Navbar />
             <div className="container-fluid mb-5">
                 <div className="row">
                     <div className="col-10">
