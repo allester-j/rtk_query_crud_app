@@ -5,7 +5,7 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3500'
     }),
-    tagTypes: ['Todos'],
+    tagTypes: ['Todos', 'Users'],
     endpoints: (builder) => ({
         getTodos: builder.query({
             query: () => '/todos',
@@ -35,6 +35,35 @@ export const apiSlice = createApi({
                 body: id
             }),
             invalidatesTags: ['Todos']
+        }),
+        getUsers: builder.query({
+            query: () => '/users',
+            transformResponse: res => res.sort((a, b) => b.id - a.id),
+            providesTags: ['Users']
+        }),
+        addUser: builder.mutation({
+            query: (user) => ({
+                url: '/users',
+                method: 'POST',
+                body: user
+            }),
+            invalidatesTags: ['Users']
+        }),
+        updateUser: builder.mutation({
+            query: (user) => ({
+                url: `/users/${user.id}`,
+                method: 'PATCH',
+                body: user
+            }),
+            invalidatesTags: ['Users']
+        }),
+        deleteUser: builder.mutation({
+            query: ({ id }) => ({
+                url: `/users/${id}`,
+                method: 'DELETE',
+                body: id
+            }),
+            invalidatesTags: ['Users']
         })
     })
 })
@@ -43,5 +72,9 @@ export const {
     useGetTodosQuery,
     useAddTodoMutation,
     useUpdateTodoMutation,
-    useDeleteTodoMutation
+    useDeleteTodoMutation,
+    useGetUsersQuery,
+    useAddUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation
 } = apiSlice
