@@ -297,6 +297,48 @@
       "company": {
         "name": "Abernathy Group"
       }
+    },
+    {
+      "name": "John Doe",
+      "username": "johnnie123",
+      "email": "john@example.com",
+      "address": {
+        "street": "Kampala Rd",
+        "suite": "123 Example",
+        "city": "Kampala",
+        "zipcode": "097098",
+        "geo": {
+          "lat": "-37.3159",
+          "lng": "84.8753"
+        }
+      },
+      "phone": "0789876345",
+      "website": "acmeinc.com",
+      "company": {
+        "name": "ACME Inc"
+      },
+      "id": 9
+    },
+    {
+      "name": "Tom Doe",
+      "username": "tommy123",
+      "email": "tom@gmail.com",
+      "address": {
+        "street": "0987 Jinja Rd",
+        "suite": "0987 Kampala",
+        "city": "Kampala",
+        "zipcode": "0979876",
+        "geo": {
+          "lat": "-37.3159",
+          "lng": "84.8753"
+        }
+      },
+      "phone": "09877654556",
+      "website": "abccorp.com",
+      "company": {
+        "name": "ABC Corp"
+      },
+      "id": 10
     }
   ]
 }

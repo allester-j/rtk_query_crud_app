@@ -4,25 +4,9 @@ import { useGetUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteU
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons"
 import Swal from "sweetalert2"
+import AddUserModal from "../../components/AddUserModal/AddUserModal"
 
 const Users = () => {
-
-    const [newUser, setNewUser] = useState({
-        name: '',
-        username: '',
-        email: '',
-        street: '',
-        suite: '',
-        city: '',
-        zipcode: '',
-        lat: '-37.3159',
-        lng: '84.8753',
-        phone: '',
-        website: '',
-        companyName: ''
-    })
-
-    const { name, username, email, street, suite, city, zipcode, lat, lng, phone, website, companyName } = newUser
 
     const {
         data: users,
@@ -32,54 +16,11 @@ const Users = () => {
         error
     } = useGetUsersQuery()
     
-    const [addUser] = useAddUserMutation()
     const [updateUser] = useUpdateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
 
     console.log('Users')
     console.log(users)
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        // Add User
-        addUser({
-            name: name,
-            username: username,
-            email: email,
-            address: {
-                street: street,
-                suite: suite,
-                city: city,
-                zipcode: zipcode,
-                geo: {
-                    lat: lat,
-                    lng: lng
-                }
-            },
-            phone: phone,
-            website: website,
-            company: {
-                name: companyName
-            }
-        })
-
-        // Reset state
-        setNewUser({
-            name: '',
-            username: '',
-            email: '',
-            street: '',
-            suite: '',
-            city: '',
-            zipcode: '',
-            lat: '-37.3159',
-            lng: '84.8753',
-            phone: '',
-            website: '',
-            companyName: ''
-        })
-    }
 
     const handleDeleteUserBtnClick = (e, row) => {
         e.stopPropagation()
@@ -283,7 +224,16 @@ const Users = () => {
     return (
         <>
             <div className="container-fluid mb-5">
-                <h1 className="text-primary mb-3 mt-3">Users</h1>
+                <div className="row">
+                    <div className="col-10">
+                    <h1 className="text-primary mb-3 mt-3">Users</h1>
+                    </div>
+                    <div className="col-2">
+                        <div className="mt-3">
+                            <AddUserModal />
+                        </div>
+                    </div>
+                </div>
                 {content}
             </div>
         </>
