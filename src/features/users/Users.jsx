@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"
-import { DataGrid, GridToolbar, GridRowsProp, GridColDef } from '@mui/x-data-grid'
-import { useGetUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } from "../api/apiSlice"
+import React from "react"
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { useGetUsersQuery, useUpdateUserMutation, useDeleteUserMutation } from "../api/apiSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons"
+import { faTrash } from "@fortawesome/free-solid-svg-icons"
 import Swal from "sweetalert2"
 import AddUserModal from "../../components/AddUserModal/AddUserModal"
 import Navbar from "../../components/Navbar/Navbar"
@@ -160,7 +160,7 @@ const Users = () => {
 
                         try {
 
-                            const updatedUser = updateUser({
+                            updateUser({
                                 id: updatedRow.systemId,
                                 name: updatedRow.name,
                                 username: updatedRow.username,
